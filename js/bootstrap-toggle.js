@@ -60,7 +60,7 @@
 			.addClass(size)
 		var $toggleGroup = $('<div class="toggle-group">')
 			.append($toggleOn, $toggleOff, $toggleHandle)
-		var $toggle = $('<div class="toggle btn" data-toggle="toggle">')
+		var $toggle = $('<div class="toggle btn" data-toggle="toggle" tabindex="0" role="checkbox" aria-checked="false">')
 			.addClass( this.$element.prop('checked') ? this._onstyle : this._offstyle+' off' )
 			.addClass(size).addClass(this.options.style)
 
@@ -93,14 +93,14 @@
 
 	Toggle.prototype.on = function (silent) {
 		if (this.$element.prop('disabled')) return false
-		this.$toggle.removeClass(this._offstyle + ' off').addClass(this._onstyle)
+		this.$toggle.removeClass(this._offstyle + ' off').addClass(this._onstyle).attr('aria-checked', true)
 		this.$element.prop('checked', true)
 		if (!silent) this.trigger()
 	}
 
 	Toggle.prototype.off = function (silent) {
 		if (this.$element.prop('disabled')) return false
-		this.$toggle.removeClass(this._onstyle).addClass(this._offstyle + ' off')
+		this.$toggle.removeClass(this._onstyle).addClass(this._offstyle + ' off').attr('aria-checked', false)
 		this.$element.prop('checked', false)
 		if (!silent) this.trigger()
 	}
@@ -175,6 +175,12 @@
 		var $checkbox = $(this).find('input[type=checkbox]')
 		$checkbox.bootstrapToggle('toggle')
 		e.preventDefault()
+	}).on('keydown.bs.toggle', 'div[data-toggle^=toggle]', function(e) {
+		if (e.keyCode == 32) {
+			var $checkbox = $(this).find('input[type=checkbox]')
+			$checkbox.bootstrapToggle('toggle')
+			e.preventDefault()
+		}
 	})
 
 }(jQuery);
